@@ -1,0 +1,126 @@
+
+{% extends 'base.html' %}
+
+{% block title %} Google scholar API {% endblock %}
+
+{% block content %}
+<style>
+body{
+background-color:#E3F6FF;
+font-family:montserrat;
+}
+</style>
+    <table class="table table-hover" style="margin-top:2%;">
+        <thead style="background-color:#BDCDD6;">
+            <tr>
+            <th>SI.no</th>
+                <th>Title</th>
+                <th>Authors</th>
+                <th>Publisher</th>
+                <th> </th>
+                <th>Year</th>
+                <th>Cited By</th>
+                <th> </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, publication in publications.items() %}
+            <tr>
+            <td>{{loop.index}}</td>
+                <td>{{ publication['title'] }}</td>
+                
+                <td>
+                    <table class="table">
+                        {% for key, author in publication['authors'].items() %}
+                        <tr>
+                            <td class="col-md-9">{{author['name']}}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('tagged') }}">
+                                    <input type="hidden" name="author" value="{{ author['name'] }}">
+                                    <input type="hidden" name="year" value="{{ publication['year'] }}">
+                                    <input type="hidden" name="title" value="{{ publication['title'] }}">
+                                    
+
+                                    <select name="tagg" type="submit button" class="btn btn-secondary btn-sm dropdown-toggle"onchange="this.form.submit()">
+                                        {% if author['tagg'] %}
+                                            <option>{{ author['tagg'] }}</option>
+                                        {% else %}
+                                            <option selected>Tag</option>
+                                        {% endif %}
+                                        <option value="Faculty">Faculty</option>
+                                        <option value="External">External</option>
+                                        <option value="B.tech">B.tech</option>
+                                        <option value="M.tech(CS)">M.tech(CS)</option>
+                                        <option value="M.tech(IS)">M.tech(IS)</option>
+                                        <option value="M.tech(AI-DA)">M.tech(AI-DA)</option>
+                                        <option value="Ph.D">Ph.D</option>
+                                    </select>
+                                    
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </td>
+                
+                
+                
+                <td> 
+                    <table>
+                        <tr>
+                            <td class="col-md-9">{{ publication['publication']['publication']}}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('tagged') }}">
+                                    
+                                    <input type="hidden" name="year" value="{{ publication['year'] }}">
+                                    <input type="hidden" name="title" value="{{ publication['title'] }}">
+                                    
+
+                                    <select name="p_tagg" type="submit button" class="btn btn-secondary btn-sm dropdown-toggle"onchange="this.form.submit()">
+                                        {% if publication.get('publication') and publication['publication'].get('p_tagg') %}
+                                            <option>{{ publication['publication']['p_tagg'] }}</option>
+                                        {% else %}
+                                            <option selected>untagged</option>
+                                        {% endif %}
+                                        <option value="Conference">Conference</option>
+                                        <option value="Journal">Journal</option>
+                                        
+                                    </select>
+                                    
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td> 
+                    <form method="POST" action="{{ url_for('tagged') }}">
+                        <input type="hidden" name="year" value="{{ publication['year'] }}">
+                        <input type="hidden" name="title" value="{{ publication['title'] }}">
+                        <div class="form-check">
+                            {% if publication['SCI'] == True %}
+                            <input type="checkbox" class="form-check-input" id="check1" name="SCI" value="true" checked onclick="this.form.submit()">
+                            {% else %}
+                            <input type="checkbox" class="form-check-input" id="check1" name="SCI" value="true" onclick="this.form.submit()">
+                            {% endif %}
+                            <label class="form-check-label" for="check1">SCI</label>
+                        </div>
+                        <div class="form-check">
+                            {% if publication['Scopus'] == True %}
+                            <input type="checkbox" class="form-check-input" id="check2" name="Scopus" value="true" checked onclick="this.form.submit()">
+                            {% else %}
+                            <input type="checkbox" class="form-check-input" id="check2" name="Scopus" value="true" onclick="this.form.submit()">
+                            {% endif %}
+                            <label class="form-check-label" for="check2">Scopus</label>
+                        </div>
+                        
+                    </form>
+                    
+                </td>
+                <td name="year">{{ publication['year'] }}</td>
+                <td name="cited_by">{{ publication['cited_by'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+

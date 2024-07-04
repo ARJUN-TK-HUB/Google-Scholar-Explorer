@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+{% block title %} Google scholar API {% endblock %}
+{% block content %}
+<div class="container">
+   <div class="row" style="margin:10% auto;">
+      
+     
+         <img src="static/images/logo.png" class="logo2">
+     
+      
+   </div>
+   <div class="container rectangle">
+      <form method="post" action="{{ url_for('search') }}">
+         <div class="form-row">
+            <div class="col-md-3 mb-3">
+               <label for="name">Name</label>
+               <input type="text" name="author" class="form-control  name" placeholder="Name of the Author" list="name">
+               <datalist  >
+                  <option value="all">
+               </datalist>
+            </div>
+            <div class="col-md-3 mb-3">
+            <label for="Category">Category</label>
+            <input type="text" name="tagg" class="form-control  Category" placeholder="Category" list="category">
+            
+            <datalist  id="category">
+            <option value="Faculty">Faculty</option>
+            <option value="External">External</option>
+            <option value="B.tech">B.tech</option>
+            <option value="M.tech(CS)">M.tech(CS)</option>
+            <option value="M.tech(IS)">M.tech(IS)</option>
+            <option value="M.tech(AI-DA)">M.tech(AI-DA)</option>
+            <option value="Ph.D">Ph.D</option>
+            </datalist>
+            </div>
+            <div class="col-md-3 mb-3">
+               <label for="year">Year of publication</label>
+               <input name="year" type="text" class="form-control  year" placeholder="year" list="year">
+               <datalist>
+                  <option value="all">
+               </datalist>
+               <label for="year">From year</label>
+               <input name="from_year" type="text" class="form-control  year" placeholder="from year" list="year">
+               <datalist>
+                  <option value="all">
+               </datalist>
+               <label for="year">To year</label>
+               <input name="to_year" type="text" class="form-control  year" placeholder="to year" list="year">
+               <datalist>
+                  <option value="all">
+               </datalist>
+            </div>
+            <div class="col-md-3 mb-3">
+            <label for="publication">Publication type</label>
+            <input type="text" name="p_tagg" class="form-control  Category" placeholder="Publication type" list="publication">
+            <datalist  id="publication">
+            <option value="all">
+            <option value="Conference">
+            <option value="Journal">
+            </datalist>
+            </div>
+            <div class="col-md-3 mb-3">
+
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="sci" value="true">
+                    <label class="form-check-label" for="sci"><b>SCI</b></label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="scopus" value="true">
+                    <label class="form-check-label" for="scopus"><b>Scopus</b></label>
+                </div>
+                </div>
+         </div>
+         <br>
+         <button class="btn btn-secondary" type="submit">Submit</button>
+      </form>
+   </div>
+</div>
+
+
+
+{% if l!=0 %}
+<br>
+<h5>{{l}} records found</h5>
+<br>
+{% endif %}
+
+
+
+{% if publications %}
+<a href="{{ url_for('export',publications=publications) }}" class="btn btn-primary">Export to CSV file</a>
+<table id="myTable" class="table table-hover" style="margin-top:2%;">
+    <thead style="background-color:#A5D7E8;">
+        <tr>
+        <th>SI.no</th>
+       <th onclick="sortTable(1)"> <i class="fas fa-lg fa-sort" style="margin-right:9px;"></i> <span>Title</span></th>
+        
+            <th>Authors</th>
+            <th>Publisher</th>
+           <th></th>
+            <th onclick="sortTable(5)">Year <i class="fas fa-lg fa-sort" ></i>  </th>
+            
+            <th>Cited By</th>
+           
+        </tr>
+    </thead>
+    <tbody style="background-color:#C9EEFF;">
+        {% for key, publication in publications.items() %}
+        <tr>
+        <td>{{loop.index}}</td>
+        <td style="text-align:center;"><b>{{ publication['title'] }}</b></td>
+            
+            <td>
+                <table class="table">
+                    {% for key, author in publication['authors'].items() %}
+                    <tr>
+                        <td class="col-md-9">{{author['name']}}</td>
+                        <td>
+                           
+                          <button class="btn btn-secondary" style="width: 150px; height: 25px; font-size: 14px; padding: 0 0; margin-left: 5px; margin-right: 5px; line-height: 20px;">{{author['tagg']}}</button>
+
+ 
+  
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </td>
+            
+            
+            
+            <td> 
+                <table>
+                    <tr>
+                        <td class="col-md-9">{{ publication['publication']['publication']}}</td>
+                        
+                            {% if publication['publication']['publication'] %}
+                            
+                            <td><button class="btn btn-secondary" style="width: 150px; height: 25px; font-size: 14px; padding: 0 0; margin-left: 5px; margin-right: 5px; line-height: 20px;">{{publication['publication']['p_tagg']}}</button></td>
+                            {%endif%}
+                        
+                    </tr>
+                </table>
+            </td>
+            <td> 
+               
+                    
+                    <div class="form-check">
+                        {% if publication['SCI'] == True %}
+                        <input type="checkbox" class="form-check-input" id="check1" name="SCI" value="true" checked onclick="this.form.submit()">
+                        {% else %}
+                        <input type="checkbox" class="form-check-input" id="check1" name="SCI" value="true" onclick="this.form.submit()">
+                        {% endif %}
+                        <label class="form-check-label" for="check1">SCI</label>
+                    </div>
+                    <div class="form-check">
+                        {% if publication['Scopus'] == True %}
+                        <input type="checkbox" class="form-check-input" id="check2" name="Scopus" value="true" checked onclick="this.form.submit()">
+                        {% else %}
+                        <input type="checkbox" class="form-check-input" id="check2" name="Scopus" value="true" onclick="this.form.submit()">
+                        {% endif %}
+                        <label class="form-check-label" for="check2">Scopus</label>
+                    </div>
+                    
+             
+                
+            </td>
+            <td name="s_year">{{ publication['year'] }}</td>
+            <td name="s_cited_by">{{ publication['cited_by'] }}</td>
+            
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+function sortTable(n) {
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.getElementById("myTable");
+  switching = true;
+  dir = "asc"; 
+  while (switching) {
+    switching = false;
+    rows = table.rows;
+    for (i = 1; i < (rows.length - 1); i++) {
+      shouldSwitch = false;
+      x = rows[i].getElementsByTagName("TD")[n];
+      y = rows[i + 1].getElementsByTagName("TD")[n];
+      if (n == 5) { // Check if Year column
+      x = rows[i].cells[n].textContent.trim();
+      y = rows[i + 1].cells[n].textContent.trim();
+      if (!isNaN(x) && !isNaN(y)) {
+      x = Number(x);
+      y = Number(y);
+      }
+
+
+       console.log(x);
+       console.log(y);
+      } else { // For other columns
+        x = x.textContent.toLowerCase();
+        y = y.textContent.toLowerCase();
+      }
+      if (dir == "asc") {
+        if (x > y) {
+          shouldSwitch= true;
+          break;
+        }
+      } else if (dir == "desc") {
+        if (x < y) {
+          shouldSwitch = true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      switchcount ++;      
+    } else {
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+
+</script>
+{% endif %}
+{% endblock %}
+
+
+

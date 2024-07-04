@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %} Google scholar API {% endblock %}
+
+{% block content %}
+<div class="container rectangle" style="text-align:center; margin-top:20%;">
+    <h1 class="rectangle" >Enter google scholar link</h1>
+    
+    <form method="post">
+    <div class="form row" style="margin-left:30px;margin-right:30px;  ">
+      <label for="url">Enter URL</label>
+      <input type="text" id="urll" name="urll" class="form-control" placeholder="URL">  
+    </div>
+  <br>
+  <button class="btn btn-secondary " type="submit">Submit</button>
+  </form>
+  
+</div>
+{% endblock %}

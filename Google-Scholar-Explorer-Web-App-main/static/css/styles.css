@@ -1,0 +1,39 @@
+body{
+background-color:#93BFCF;
+font-family:Montserrat;
+}
+
+
+.index_btn{
+ width:60%;
+ }
+ 
+.logo{
+width:200px;
+height:200px;
+margin:auto;
+margin-top:15%;
+}
+
+
+.rectangle{
+background-color:#EEE9DA;
+padding:25px;
+border-radius:5px;
+}
+
+
+.btn2{
+margin: auto 50%;
+}
+
+.logo2{
+width:150px;
+height:150px;
+margin:auto;
+}
+
+
+th {
+  cursor: pointer;
+}

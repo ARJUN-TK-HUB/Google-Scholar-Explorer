@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %} Google scholar API {% endblock %}
+
+{% block content %}
+<div class="container">
+<div class="row">
+   <img src="static/images/logo.png" class="logo"> 
+</div>
+<div class="row" >   
+	  <div class="col-md-3" style="text-align: center;">  
+        <a href="{{url_for('url')}}">
+          <button type="button" class="btn btn-lg btn-primary index_btn " style="margin:60px;">Enter URL</button>
+        </a> 
+    </div>
+	   
+	  <div class="col-md-3" style="text-align: center;">  
+        <a href="{{url_for('search')}}">
+         <button type="button" class="btn btn-lg btn-primary index_btn" style="margin: 60px 70px auto;
+         ">Search</button>
+      </a>
+    </div>
+	
+	
+	
+      <div class="col-md-3" style="text-align: center;">  
+         <a href="{{url_for('tagged')}}">
+         <button type="button" class="btn btn-lg btn-primary index_btn" style="margin-top:60px;">Tagged</button>
+         </a>
+      </div>
+      
+      <div class="col-md-3" style="text-align: center;">
+         <a href="{{url_for('untagged')}}">
+         <button type="button" class="btn btn-lg btn-primary index_btn" style="margin-top:60px;">Untagged</button>
+         </a>
+      </div>
+ 
+</div>  
+</div>
+{% endblock %}
+
+
+
+
